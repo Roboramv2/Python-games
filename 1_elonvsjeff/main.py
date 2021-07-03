@@ -10,6 +10,8 @@ ship = pygame.image.load("./assets/ship.png")
 empty = pygame.image.load("./assets/emptybar.png")
 redhealth = pygame.image.load("./assets/redbar.png")
 bluehealth = pygame.image.load("./assets/bluebar.png")
+bitcoin = pygame.image.load("./assets/bitcoin.png")
+
 
 screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption("Elon vs Jeff")
@@ -19,7 +21,9 @@ playerx = 370
 playery = 480
 xchange = 0
 ychange = 0
-score = 10
+abilities = [1, 0, 0]  #score for ult, bool for gatling, bool for regen
+coins = []
+coincount = 0
 health = {"elon":1000, "jeff":5000}
 lase = {"ready":1, "on":0, "count":0}
 
@@ -50,6 +54,29 @@ def ult(emp, red, score):
     red = pygame.transform.scale(red, (redsize, 3))
     screen.blit(emp, (50, 573))
     screen.blit(red, (60, 574))
+
+def shoot(coincount, coins, time = 300):
+    if coincount==time:
+        x = playerx+16
+        y = playery-32
+        coins.append([x, y])
+        coincount = 0
+    coincount+=1
+    removelist = []
+    for i in range(len(coins)):
+        if coins[i][1]>100:
+            screen.blit(bitcoin, (coins[i][0], coins[i][1]))
+            coins[i]=[coins[i][0], coins[i][1]-1]
+        else:
+            removelist.append(i)
+    coinlist = []
+    for i in range(len(coins)):
+        if i not in removelist:
+            coinlist.append(coins[i])
+    coins = coinlist
+    del coinlist
+    return [coincount, coins]
+
 
 running = True
 while running:
@@ -97,6 +124,7 @@ while running:
         else:
             lase["count"]+=1
     enemy(ship, jeff)
+    [coincount, coins] = shoot(coincount, coins)
     healthbars(health, redhealth, bluehealth)
-    ult(empty, redhealth, score)
+    ult(empty, redhealth, abilities[0])
     pygame.display.update()
