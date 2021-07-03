@@ -8,8 +8,8 @@ glaser = pygame.image.load("./assets/laser.png")
 jeff = pygame.image.load("./assets/jeff.png")
 ship = pygame.image.load("./assets/ship.png")
 empty = pygame.image.load("./assets/emptybar.png")
-jeffhealth = pygame.image.load("./assets/redbar.png")
-elonhealth = pygame.image.load("./assets/bluebar.png")
+redhealth = pygame.image.load("./assets/redbar.png")
+bluehealth = pygame.image.load("./assets/bluebar.png")
 
 screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption("Elon vs Jeff")
@@ -19,6 +19,7 @@ playerx = 370
 playery = 480
 xchange = 0
 ychange = 0
+score = 10
 health = {"elon":1000, "jeff":5000}
 lase = {"ready":1, "on":0, "count":0}
 
@@ -42,6 +43,13 @@ def healthbars(health, red, blue):
     screen.blit(empty, (50, 580))
     blue = pygame.transform.scale(blue, (bluesize, 13))
     screen.blit(blue, (70, 581))
+
+def ult(emp, red, score):
+    redsize = int((score/30)*200)
+    emp = pygame.transform.scale(emp, (210, 6))
+    red = pygame.transform.scale(red, (redsize, 3))
+    screen.blit(emp, (50, 573))
+    screen.blit(red, (60, 574))
 
 running = True
 while running:
@@ -89,6 +97,6 @@ while running:
         else:
             lase["count"]+=1
     enemy(ship, jeff)
-    healthbars(health, jeffhealth, elonhealth)
-
+    healthbars(health, redhealth, bluehealth)
+    ult(empty, redhealth, score)
     pygame.display.update()
