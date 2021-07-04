@@ -11,7 +11,7 @@ empty = pygame.image.load("./assets/emptybar.png")
 redhealth = pygame.image.load("./assets/redbar.png")
 bluehealth = pygame.image.load("./assets/bluebar.png")
 bitcoin = pygame.image.load("./assets/bitcoin.png")
-
+lasedjeff = pygame.image.load("./assets/lasedjeff.png")
 
 screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption("Elon vs Jeff")
@@ -24,8 +24,8 @@ ychange = 0
 abilities = [1, 0, 0]  #score for ult, bool for gatling, bool for regen
 coins = []
 coincount = 0
-health = {"elon":1000, "jeff":5000}
-lase = {"ready":1, "on":0, "count":0}
+health = {"elon":1001, "jeff":5001}
+lase = {"ready":0, "on":0, "count":0}
 
 def player(x, y):
     screen.blit(playerimg, (x, y))
@@ -55,7 +55,7 @@ def ult(emp, red, score):
     screen.blit(emp, (50, 573))
     screen.blit(red, (60, 574))
 
-def shoot(coincount, coins, time = 300):
+def shoot(health, coincount, coins, time = 300):
     if coincount==time:
         x = playerx+16
         y = playery-32
@@ -69,16 +69,21 @@ def shoot(coincount, coins, time = 300):
             coins[i]=[coins[i][0], coins[i][1]-1]
         else:
             removelist.append(i)
+            if health["jeff"]>0:
+                health["jeff"] -= 20
+                if abilities[0]<30:
+                    abilities[0]+=1
     coinlist = []
     for i in range(len(coins)):
         if i not in removelist:
             coinlist.append(coins[i])
     coins = coinlist
     del coinlist
-    return [coincount, coins]
+    return [health, coincount, coins]
 
 
 running = True
+gatlingcount = 0
 while running:
     
     screen.fill((0,0,0))
@@ -104,6 +109,8 @@ while running:
             ychange = 0
 
 
+    if abilities[0]==30:
+        lase["ready"]=1
     playerx = playerx + xchange
     playery = playery + ychange
 
@@ -118,13 +125,27 @@ while running:
     player(playerx, playery)
     if lase["on"]==1:
         laser(playerx, playery, glaser)
-        if lase["count"]==2500:
+        if lase["count"]==2000:
             lase["on"]=0
             lase["count"]=0
+            lase["ready"]=0
+            abilities[0]=1
         else:
             lase["count"]+=1
-    enemy(ship, jeff)
-    [coincount, coins] = shoot(coincount, coins)
+            health["jeff"]-=0.5
+    if lase["on"]!=1:
+        enemy(ship, jeff)
+        if abilities[1]==1:
+            if gatlingcount==40:
+                abilities[1]=0
+            else:
+                [health, coincount, coins] = shoot(health, coincount, coins, time =50)
+                gatlingcount+=1
+        else:
+            [health, coincount, coins] = shoot(health, coincount, coins)
+        [health, coincount, coins] = shoot(health, coincount, coins)
+    else:
+        enemy(ship, lasedjeff)
     healthbars(health, redhealth, bluehealth)
     ult(empty, redhealth, abilities[0])
     pygame.display.update()
