@@ -4,6 +4,7 @@ pygame.init()
 
 icon = pygame.image.load("./assets/icon.png")
 playerimg = pygame.image.load("./assets/elon.png")
+desmond = pygame.image.load("./assets/desboss.png")
 glaser = pygame.image.load("./assets/laser.png")
 jeff = pygame.image.load("./assets/jeff.png")
 ship = pygame.image.load("./assets/ship.png")
@@ -19,6 +20,7 @@ pygame.display.set_icon(icon)
 clock = pygame.time.Clock()
 playerx = 370
 playery = 480
+state = 0
 xchange = 0
 ychange = 0
 abilities = [1, 0, 0]  #score for ult, bool for gatling, bool for regen
@@ -27,8 +29,8 @@ coincount = 0
 health = {"elon":1001, "jeff":5001}
 lase = {"ready":0, "on":0, "count":0}
 
-def player(x, y):
-    screen.blit(playerimg, (x, y))
+def player(img, x, y):
+    screen.blit(img, (x, y))
 
 def laser(x, y, glaser):
     glaser = pygame.transform.scale(glaser, (32, y))
@@ -115,14 +117,19 @@ while running:
     playery = playery + ychange
 
     if playerx > 736:
+        state = 0
         playerx = 736
     if playerx < 0:
+        state = 1
         playerx = 0
     if playery > 536:
         playery = 536
     if playery < 200:
         playery = 200
-    player(playerx, playery)
+    if state ==0:
+        player(playerimg, playerx, playery)
+    else:
+        player(desmond, playerx, playery)
     if lase["on"]==1:
         laser(playerx, playery, glaser)
         if lase["count"]==2000:
