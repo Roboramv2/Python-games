@@ -9,21 +9,9 @@ Guidelines/rules:
 * elon shoots bitcoins while moving
 * elon can press x for big laser ultimate
 * elon starts with 1000 health
-* each shot gives 1 ultimate point, breaking regenerator gives 10
+* each shot gives 1 ultimate point
 * 30 ult points required to activate green laser
-* jeff ship is big, fixed
-* jeff shoots small lasers in random lanes
-* jeff shooting frequency increases as his health decreases
+* jeff's ship is big and stationary
+* jeff shoots small lasers in random lanes (yet to)
 * jeff starts with 5000 health
-* jeff regen health periodically from second bar
-* jeff regen deactivated if elon breaks regenerator
 
-## PvZ ripoff:
-
-## Aim Training for FPS games:
-
-## Mario ripoff:
-
-## Clash of clans ripoff:
-
-## 2D minecraft:
